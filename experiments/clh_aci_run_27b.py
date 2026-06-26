@@ -83,7 +83,8 @@ import benchmark  # noqa: E402
 FULL = "--full" in sys.argv
 VLLM = {
     "provider": "openai",
-    "api_base": "http://localhost:6539/v1",
+    # port 8010 = scripts/serve-qwen36.sh (the canonical project q36 recipe, E-004/5/6)
+    "api_base": "http://localhost:8010/v1",
     "endpoint": "chat/completions",
     "deployment": "Qwen/Qwen3.6-27B",
     "use_cache": False,
