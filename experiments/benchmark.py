@@ -30,7 +30,8 @@ class Arguments(pydantic.BaseModel):
     experiment_id: str = "agentic-system"
     experiment_name: str = "v2"
 
-    dataset: str = "mdace-icd10cm"  # "mimic-iii-50" | "mimic-iv" | "mdace-icd10cm"
+    dataset: str = "mdace-icd10cm"  # "mimic-iii-50" | "mimic-iv" | "mdace-icd10cm" | "aci-bench-icd10cm"
+    catalog_year: int = 2022  # CMS ICD-10-CM edition for the trie/index (ACI-BENCH gold is FY2024+, use 2025)
     seed: int = 1
     n_samples: int = 1
 
@@ -107,13 +108,16 @@ def run(args: Arguments):
     qdrant_service = qdrant_client.QdrantSearchService(
         **args.qdrant_config.model_dump()
     )
-    xml_trie = exp_utils.build_icd_trie(year=2022)
+    xml_trie = exp_utils.build_icd_trie(year=args.catalog_year)
     mdace = load_dataset(DatasetConfig(**dataloader.DATASET_CONFIGS[args.dataset]))
     mdace = exp_utils.format_dataset(mdace, xml_trie, args.debug)
     # mdace = mdace.select(range(15))
-    mdace = mdace.select(
-        (i for i in range(len(mdace)) if i not in [27, 179, 260, 327, 379, 394])
-    )
+    # These dropped indices are MDACE-specific (malformed/oversized notes in the
+    # MDACE test split); they must not be applied to other datasets.
+    if args.dataset == "mdace-icd10cm":
+        mdace = mdace.select(
+            (i for i in range(len(mdace)) if i not in [27, 179, 260, 327, 379, 394])
+        )
     if args.all_codes:
         eval_trie: dict[str, int] = OrderedDict(
             {code: idx for idx, code in enumerate(sorted(xml_trie.lookup), start=1)}

@@ -1,3 +1,4 @@
+from dataloader.adapt.adapters.aci import AciBenchAdapter
 from dataloader.adapt.adapters.mdace import MdaceAdapter
 from dataloader.adapt.adapters.meddec import MedDecAdapter
 from dataloader.adapt.adapters.mimic import (
@@ -10,6 +11,7 @@ from dataloader.adapt.adapters.tanner import TannerAdapter
 from dataloader.adapt.base import Adapter
 
 KNOWN_ADAPTERS: list[type[Adapter]] = [
+    AciBenchAdapter,
     NbmeAdapter,
     MedDecAdapter,
     SnomedAdapter,

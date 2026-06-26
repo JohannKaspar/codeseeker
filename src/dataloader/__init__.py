@@ -1,3 +1,4 @@
+from dataloader.aci.loader import load_aci_bench
 from dataloader.interface import load_dataset  # noqa: F401
 from dataloader.mdace.constants import MDACE_INPATIENT_PATH as mdace_inpatient
 from dataloader.meddec.constants import MEDDEC_PATH as meddec
@@ -26,6 +27,12 @@ DATASET_CONFIGS: dict[str, dict] = {
         "name_or_path": mdace_inpatient,
         "subsets": ["icd10cm"],
         "options": {"adapter": "MdaceAdapter"},
+    },
+    "aci-bench-icd10cm": {
+        "identifier": "aci-bench-icd10cm",
+        "name_or_path": load_aci_bench,
+        "split": "test",
+        "options": {"adapter": "AciBenchAdapter"},
     },
     "mimic-iv": {
         "identifier": "mimic-iv",
