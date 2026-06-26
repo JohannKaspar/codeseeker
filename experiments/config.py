@@ -1,11 +1,17 @@
 import hashlib
+import os
 import pathlib
 import typing as typ
 import pydantic
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-DUMP_FOLDER = pathlib.Path("~/research/codeseeker/experiments").expanduser()
+# Default to NFS (~/research) but allow redirecting to local disk via env. Long runs
+# on Kerberos-mounted NFS can hit "Key has expired" mid-run; pointing dumps at /local*
+# keeps the run NFS-free after startup.
+DUMP_FOLDER = pathlib.Path(
+    os.environ.get("CODESEEKER_DUMP_FOLDER", "~/research/codeseeker/experiments")
+).expanduser()
 
 
 class BaseArguments(BaseSettings):
