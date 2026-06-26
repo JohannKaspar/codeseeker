@@ -15,6 +15,10 @@ Usage: python clh_aci_run_70b.py          # smoke debug=True (10 test notes)
 import os
 import sys
 
+# vLLM accepts any key; throughster's OpenAiClientSettings requires API_KEY to be set.
+os.environ.setdefault("API_KEY", "EMPTY")
+os.environ.setdefault("OPENAI_API_KEY", "EMPTY")
+
 import qdrant_client as _qcli
 import retrieval.qdrant_search.client as _qc
 import retrieval.qdrant_search.factory as _qf
