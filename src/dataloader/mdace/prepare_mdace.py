@@ -148,7 +148,7 @@ def trim_annotations(
     if text[start] in punctuations:
         start += 1
 
-    return start, end
+    return {"start": start, "end": end}
 
 
 def clean_mdace_annotations(mdace_annotations: pl.DataFrame, mdace_notes: pl.DataFrame) -> pl.DataFrame:
