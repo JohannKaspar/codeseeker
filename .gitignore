@@ -150,3 +150,7 @@ throughput/*
 .exceptions/*
 
 data/*
+
+# repro scratch (agentic-icd fork)
+.qdrant_*/
+*.bak
